@@ -1,24 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import dico from './dico.json'
 import Search from './SearchInput'
 
 function App() {
   const [search, setSearch] = useState('')
-  const [filteredDico, setFilteredDico] = useState(dico)
 
   function handleChange(e: { target: { value: string } }) {
     setSearch(e.target.value)
   }
 
-  useEffect(() => {
-    setFilteredDico(
-      dico.filter(({ avril, translation }) => {
-        return avril.toLowerCase().includes(search.toLowerCase()) ||
-          translation.toLowerCase().includes(search.toLowerCase())
-      }),
-    )
-  }, [search])
+  function getFilteredTerms(search: string) {
+    return dico.filter(({ avril, translation }) => {
+      return avril.toLowerCase().includes(search.toLowerCase()) ||
+        translation.toLowerCase().includes(search.toLowerCase())
+    })
+  }
+
+  const visibleDico = useMemo(() => getFilteredTerms(search), [search])
 
   return (
     <div className="font-handwrite flex justify-center h-min-screen w-screen overflow-x-hidden bg-gradient-to-r from-lime-600 via-emerald-700 to-emerald-700">
@@ -39,7 +38,7 @@ function App() {
 
           <ul className="text-2xl lg:text-4xl text-slate-100 ">
             {
-              filteredDico.map(({ avril, translation }) => (
+              visibleDico.map(({ avril, translation }: { avril: string; translation: string }) => (
                 <li key={avril} className="flex flex-row justify-center m-4">
                   <h2>
                     {/* &quot;{avril}&quot; */}
@@ -52,7 +51,7 @@ function App() {
             }
           </ul>
 
-          { filteredDico.length === 0 && (
+          { visibleDico.length === 0 && (
             <span className="text-center text-3xl text-slate-100 px-2">
               Avril ne connait pas ce mot
             </span>
