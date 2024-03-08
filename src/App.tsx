@@ -1,19 +1,45 @@
+import { useEffect, useState } from 'react'
+
 import dico from './dico.json'
+import Search from './SearchInput'
 
 function App() {
+  const [search, setSearch] = useState('')
+  const [filteredDico, setFilteredDico] = useState(dico)
+
+  function handleChange(e: { target: { value: string } }) {
+    setSearch(e.target.value)
+  }
+
+  useEffect(() => {
+    setFilteredDico(
+      dico.filter(({ avril, translation }) => {
+        return avril.toLowerCase().includes(search.toLowerCase()) ||
+          translation.toLowerCase().includes(search.toLowerCase())
+      }),
+    )
+  }, [search])
+
   return (
-    <div className="flex justify-center h-min-screen w-screen overflow-x-hidden bg-gradient-to-r from-lime-600 via-emerald-700 to-emerald-700">
-      <div className="flex flex-col items-center justify-start w-full">
+    <div className="font-handwrite flex justify-center h-min-screen w-screen overflow-x-hidden bg-gradient-to-r from-lime-600 via-emerald-700 to-emerald-700">
+      <div className="flex flex-col items-center justify-start w-full min-h-screen">
         <div className="bg-[url('/title.png')] bg-cover bg-center bg-no-repeat w-[560px] h-[445px] relative">
-          <h1 className="text-4xl font-bold absolute text-slate-100 font-handwrite text-center w-full top-[275px]">
+          <h1 className="text-4xl font-bold absolute text-slate-100 text-center w-full top-[275px]">
           Le dico d&apos;Avril
           </h1>
         </div>
 
-        <div className="flex flex-grow relative">
-          <ul className="text-2xl lg:text-4xl text-slate-100 font-handwrite">
+        <div className="flex flex-col flex-grow relative">
+          <div className="text-center py-4">
+            <Search
+              inputValue={search}
+              handleChange={handleChange}
+            />
+          </div>
+
+          <ul className="text-2xl lg:text-4xl text-slate-100 ">
             {
-              dico.map(({ avril, translation }) => (
+              filteredDico.map(({ avril, translation }) => (
                 <li key={avril} className="flex flex-row justify-center m-4">
                   <h2>
                     {/* &quot;{avril}&quot; */}
@@ -26,6 +52,12 @@ function App() {
             }
           </ul>
 
+          { filteredDico.length === 0 && (
+            <span className="text-center text-3xl text-slate-100 px-2">
+              Avril ne connait pas ce mot
+            </span>
+          ) }
+
           <img src="/banana-stickers.png" className="hidden sm:block lg:hidden absolute bottom-0 -left-32 h-32" />
         </div>
 
@@ -34,9 +66,9 @@ function App() {
         </span>
       </div>
 
-      <img src="/branch.png" className="hidden md:block absolute -bottom-10 -left-4" />
+      <img src="/branch.png" className="hidden md:block absolute bottom-0 -left-4" />
 
-      <img src="/branch.png" className="hidden md:block absolute top-80 -right-4 scale-x-[-1]" />
+      <img src="/branch.png" className="hidden md:block absolute top-72 -right-1 scale-x-[-1]" />
     </div>
   )
 }
