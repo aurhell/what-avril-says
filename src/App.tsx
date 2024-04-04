@@ -1,23 +1,27 @@
 import { useMemo, useState } from 'react'
 
-import dico from './dico.json'
-import Search from './SearchInput'
+import Search from './components/SearchInput'
+import Dico from './components/Dico'
+import { useDico } from './hooks/useDico'
 
 function App() {
   const [search, setSearch] = useState('')
+  const words = useDico()
 
   function handleChange(e: { target: { value: string } }) {
     setSearch(e.target.value)
   }
 
-  function getFilteredTerms(search: string) {
-    return dico.filter(({ avril, translation }) => {
-      return avril.toLowerCase().includes(search.toLowerCase()) ||
-        translation.toLowerCase().includes(search.toLowerCase())
-    })
-  }
+  const visibleWords = useMemo(() => {
+    function getFilteredTerms(search: string) {
+      return words.filter(({ avril, translation }) => {
+        return avril.toLowerCase().includes(search.toLowerCase()) ||
+          translation.toLowerCase().includes(search.toLowerCase())
+      })
+    }
 
-  const visibleDico = useMemo(() => getFilteredTerms(search), [search])
+    return getFilteredTerms(search)
+  }, [search, words])
 
   return (
     <div className="font-handwrite flex justify-center h-min-screen w-screen overflow-x-hidden bg-gradient-to-r from-lime-600 via-emerald-700 to-emerald-700">
@@ -36,26 +40,7 @@ function App() {
             />
           </div>
 
-          <ul className="text-2xl lg:text-4xl text-slate-100 ">
-            {
-              visibleDico.map(({ avril, translation }: { avril: string; translation: string }) => (
-                <li key={avril} className="flex flex-row justify-center m-4">
-                  <h2>
-                    {/* &quot;{avril}&quot; */}
-                    {avril}
-                  </h2>
-                  <span className="mx-2">=</span>
-                  <h2>{translation}</h2>
-                </li>
-              ))
-            }
-          </ul>
-
-          { visibleDico.length === 0 && (
-            <span className="text-center text-3xl text-slate-100 px-2">
-              Avril ne connait pas ce mot
-            </span>
-          ) }
+          <Dico words={visibleWords} />
 
           <img src="/banana-stickers.png" className="hidden sm:block lg:hidden absolute bottom-0 -left-32 h-32" />
         </div>
