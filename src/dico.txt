@@ -26,3 +26,4 @@ Boupin=Bout de pain
 Babar=Je veux voir
 Copokan=Toboggan
 Poulelle=Poubelle
+Moumi=Fourmi
