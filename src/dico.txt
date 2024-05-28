@@ -27,3 +27,5 @@ Babar=Je veux voir
 Copokan=Toboggan
 Poulelle=Poubelle
 Moumi=Fourmi
+Oupi=Youpi
+Etal=De l'aide
