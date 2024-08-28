@@ -29,3 +29,4 @@ Poulelle=Poubelle
 Moumi=Fourmi
 Oupi=Youpi
 Etal=De l'aide
+Patolé=Pâte à modeler
