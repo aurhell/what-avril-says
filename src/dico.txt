@@ -31,3 +31,4 @@ Oupi=Youpi
 Etal=De l'aide
 Patolé=Pâte à modeler
 Marorette=Marionnette
+Cocilette=Coccinelle
